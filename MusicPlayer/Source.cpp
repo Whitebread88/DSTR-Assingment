@@ -5,6 +5,7 @@ using namespace std;
 void main() {
 	cout << "hello this is a test";
 	//if you see this try to change something
-	//remember to commit first, then push;
+	//commit first, then push all
+	//remeber to pull also
 }
 
