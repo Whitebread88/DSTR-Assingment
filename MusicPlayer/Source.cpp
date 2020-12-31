@@ -25,16 +25,14 @@ struct playlist {
 	playlist* next;
 	playlist* prev;
 };
-
-struct playlistName {
-	playlist name;
-	playlistName* next;
-	playlistName* prev;
-};
+;
 
 class Collection {
 public:
-	Song song;
+	int song_id;
+
+	void add_song();
+
 	void display_all();
 };
 
@@ -51,9 +49,8 @@ void Collection::display_all() {
 }
 
 
-
 void main() {
-	Collection collection;
+	Collection collection();
 	int option, value;
 	cout << "\n1. Insert new song" << endl;
 	cout << "2. Display songs" << endl;
@@ -69,13 +66,13 @@ void main() {
 		display_song();
 		break;
 	case(3):
-		collection.display_all();
+		display_all();
 	default:
 		break;
 	}
 }
 
-void add_song() {
+void Collection::add_song(){
 	int id;
 	bool duplicate = false;
 	cout << "Enter the song ID: ";
@@ -96,19 +93,19 @@ void add_song() {
 	}
 	if (head == NULL || !duplicate)
 	{
-		Song* newNode = new Song;
+		Song* newSong = new Song;
 		cout << "Enter the song ID: ";
-		newNode->id = id;
+		newSong->id = id;
 		cout << "Enter singer name: ";
-		cin >> newNode->singer;
+		cin >> newSong->singer;
 		cout << "Enter song title: ";
-		cin >> newNode->title;
+		cin >> newSong->title;
 		cout << "Enter song genre: ";
-		cin >> newNode->genre;
+		cin >> newSong->genre;
 		cout << "Enter song duration: ";
-		cin >> newNode->duration;
-		newNode->next = head;
-		head = newNode;
+		cin >> newSong->duration;
+		newSong->next = head;
+		head = newSong;
 	}
 	else {
 		cout << "Error";
@@ -152,7 +149,7 @@ void delete_song() {
 		Song* todelete = head;
 		Song* prev = NULL;
 		cout << "Enter the song ID: ";
-		cin>> id;
+		cin >> id;
 		while (todelete != NULL)
 		{
 			if (todelete->id == id)
@@ -182,5 +179,8 @@ void delete_song() {
 		else {
 			cout << "Song not found" << endl;
 		}
+		
 	}
 	main();
+}
+	
