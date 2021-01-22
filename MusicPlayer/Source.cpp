@@ -16,6 +16,7 @@ int view_playlist();
 void view_songs();
 void remove_song();
 void delete_playlist();
+void playlist_search();
 
 struct Song {
 	string artist, title, genre;
@@ -56,6 +57,7 @@ void main() {
 	cout << "7. View Songs in Playlist" << endl;
 	cout << "8. Remove song from Playlist" << endl;
 	cout << "9. Delete Playlist" << endl;
+	cout << "10. Search for playlists with specific songs" << endl;
 	cout << "Choose an option: ";
 	cin >> option;
 	switch (option)
@@ -86,6 +88,9 @@ void main() {
 		break;
 	case(9):
 		delete_playlist();
+		break;
+	case(10):
+		playlist_search();
 		break;
 	default:
 		break;
@@ -126,17 +131,115 @@ int display_song_collection() {
 }
 
 void delete_song_collection() {		//remove selected song from Collection and playlists
-	int i;
+	string x;
+	int count = 0;
 	display_song_collection();
-	cout << "Enter song number to delete song: ";
-	cin >> i;
-	Collection.erase(Collection.begin() + i - 1);
-	display_song_collection();
-	//
+	cout << "Enter song name to delete song: ";
+	cin >> x;
+	for (const Song& e : Collection)
+	{
+		if (x == e.title)
+		{
+			Collection.erase(Collection.begin() + count);
+			cout << "Song: " << x << " deleted." << endl;
+		}
+		count += 1;
+	}
+	if (PLHead != NULL) {
+		Playlist* playlist = PLHead;
+		while (playlist != NULL)
+		{
+			Song* currentPL = playlist->songinfo;
+			Song* todelete = currentPL;
+			bool found = false;
+			Song* prev = NULL;
+			while (todelete != NULL)
+			{
+				if (x == todelete->title)
+				{
+					found = true;
+					break;
+				}
+				prev = todelete;
+				todelete = todelete->nextsong;
+			}
+			if (found)
+			{
+				if (prev != NULL)
+				{
+					if (todelete->nextsong != NULL)
+					{
+						prev->nextsong = todelete->nextsong;
+						todelete->nextsong->prevsong = prev;
+						delete todelete;
+					}
+					else
+					{
+						prev->nextsong = todelete->nextsong;
+						delete todelete;
+					}
+				}
+				else
+				{
+					todelete = currentPL;
+					currentPL = currentPL->nextsong;
+					delete todelete;
+					playlist->songinfo = currentPL;
+				}
+				cout << "Song: " << x << " deleted from playlist." << endl;
+			}
+			playlist = playlist->nextplaylist;
+		}
+	}
+	main();
 }
 
-void playlist_search() {	//Search and display all playlists that contains a specific song
 
+
+void playlist_search() {	//Search and display all playlists that contains a specific song
+	if (display_song_collection() != 0)
+	{
+		bool exist = false;
+		string i;
+		cout << "Enter song title to display all related playlists: ";
+		cin >> i;
+		if (PLHead->songinfo == NULL) {
+			cout << "There are no songs in any playlist. " << endl;
+		}
+		for (const Song& e : Collection)
+		{
+			if (i == e.title)
+			{
+				exist = true;
+				break;
+			}
+			else
+			{
+				cout << "Song does not exist. " << endl;
+			}
+		}
+		if (exist)
+		{
+			Playlist* playlist = PLHead;
+			while (playlist != NULL)
+			{
+				Song* currentPL = playlist->songinfo;
+				while (currentPL != NULL)
+				{
+					if (i == currentPL->title) {
+						cout << i << " found in playlist: " << playlist->name << endl;
+					}
+					currentPL = currentPL->nextsong;
+				}
+				playlist = playlist->nextplaylist;
+			}
+		}
+	}
+	else
+	{
+		cout << "Add songs in Collection before searching.";
+	}
+	main();
 }
 
 
@@ -357,7 +460,7 @@ void remove_song() {
 					if (i == todelete->title)
 					{
 						found = true;
-						cout << "Song " << playlist->name << " found.";
+						cout << "Song " << i << " found.";
 						break;
 					}
 					prev = todelete;
@@ -365,17 +468,26 @@ void remove_song() {
 				}
 				if (found)
 				{
-					if (temp->title == i) {
+					if (prev != NULL)
+					{
+						if (todelete->nextsong != NULL)
+						{
+							prev->nextsong = todelete->nextsong;
+							todelete->nextsong->prevsong = prev;
+							delete todelete;
+						}
+						else
+						{
+							prev->nextsong = todelete->nextsong;
+							delete todelete;
+						}
+					}
+					else
+					{
 						todelete = temp;
 						temp = temp->nextsong;
 						delete todelete;
-						playlist->songinfo = NULL;
-					}
-					else if (prev != NULL)
-					{
-						prev->nextsong = todelete->nextsong;
-						todelete->nextsong->prevsong = prev;
-						delete todelete;
+						playlist->songinfo = temp;
 					}
 					cout << "Song deleted." << endl;
 				}
@@ -444,7 +556,7 @@ void delete_playlist() {	//delete selected playlist
 			else
 			{
 				todelete->prevplaylist->nextplaylist = todelete->nextplaylist;
-				if (todelete->nextplaylist!=NULL)
+				if (todelete->nextplaylist != NULL)
 				{
 					todelete->nextplaylist->prevplaylist = todelete->prevplaylist;
 					delete todelete;
@@ -456,11 +568,10 @@ void delete_playlist() {	//delete selected playlist
 		{
 			cout << " Playlist does not exist";
 		}
-		
+
 	}
 	main();
 }
-
 
 
 
