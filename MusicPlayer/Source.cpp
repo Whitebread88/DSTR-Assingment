@@ -18,7 +18,7 @@ void remove_song();
 void delete_playlist();
 void playlist_search();
 
-struct Song {
+struct Song {	//Node structure for songs
 	string artist, title, genre;
 	float duration;
 	Song* nextsong;
@@ -27,7 +27,7 @@ struct Song {
 };
 Song* Shead = NULL;
 
-struct Playlist {
+struct Playlist {	//Node structure for playlist
 	string name;
 	Song* songinfo = NULL;
 	Playlist* nextplaylist;
@@ -38,7 +38,7 @@ Playlist* PLHead = NULL;
 Song* songinfo = NULL;
 
 
-vector<Song> Collection;
+vector<Song> Collection;	//Vector named Collection to store songs
 
 void main() {
 	int option;
@@ -97,7 +97,7 @@ void main() {
 	}
 }
 
-void add_song_collection() {
+void add_song_collection() {	//Add songs to the Collection vector
 	Song song;
 	cout << "Enter artist name: ";
 	cin >> song.artist;
@@ -111,7 +111,7 @@ void add_song_collection() {
 	main();
 }
 
-int display_song_collection() {
+int display_song_collection() {		//Display all songs stored in the Collection
 	int i = 1;
 	cout << "\nThe songs in the Collection are: ";
 	cout << "\n" << "No.\tArtist\tTitle\tGenre\tDuration" << endl;
@@ -213,10 +213,6 @@ void playlist_search() {	//Search and display all playlists that contains a spec
 				exist = true;
 				break;
 			}
-			else
-			{
-				cout << "Song does not exist. " << endl;
-			}
 		}
 		if (exist)
 		{
@@ -233,6 +229,10 @@ void playlist_search() {	//Search and display all playlists that contains a spec
 				}
 				playlist = playlist->nextplaylist;
 			}
+		}
+		else
+		{
+			cout << "Song does not exist in any playlist. " << endl;
 		}
 	}
 	else
@@ -280,7 +280,7 @@ void create_playlist() {	//create new playlist
 	main();
 }
 
-int view_playlist() {
+int view_playlist() {	//View all existing playlists
 	if (PLHead == NULL) {
 		cout << "The are no playlist.\n";
 		return 0;
@@ -297,7 +297,7 @@ int view_playlist() {
 
 }
 
-void add_song() {
+void add_song() {	//Add songs into specific playlist
 	bool exist = false;
 	if (view_playlist() != 0) {
 		Playlist* PL = PLHead;
@@ -370,7 +370,7 @@ void add_song() {
 	main();
 }
 
-void view_songs() {
+void view_songs() {		//View all songs in specific playlist
 	bool exist = false;
 	if (PLHead == NULL) {
 		cout << "The are no playlist.\n";
@@ -416,7 +416,7 @@ void view_songs() {
 	main();
 }
 
-void remove_song() {
+void remove_song() {	//Remove specific song from specific playlist
 	bool exist = false;
 	if (PLHead == NULL) {
 		cout << "The are no playlist.\n";
@@ -573,76 +573,4 @@ void delete_playlist() {	//delete selected playlist
 	main();
 }
 
-
-
-//void display_song() {
-//	if (head == NULL) {
-//		cout << "The list is empty.\n";
-//	}
-//	else
-//	{
-//		Song* current = head;
-//
-//		while (current != NULL)
-//		{
-//			cout << "Song ID: " << current->id << endl;
-//
-//			cout << "Singer: " << current->singer << endl;
-//
-//			cout << "Title: " << current->title << endl;
-//
-//			cout << "Genre: " << current->genre << endl;
-//
-//			cout << "Duration: " << current->duration << endl;
-//
-//			current = current->next;
-//		}
-//	}
-//	main();
-//}
-//
-//void delete_song() {
-//	bool found = false;
-//	int id;
-//	if (head == NULL) {
-//		cout << "The list is empty";
-//	}
-//	else {
-//		Song* todelete = head;
-//		Song* prev = NULL;
-//		cout << "Enter the song ID: ";
-//		cin >> id;
-//		while (todelete != NULL)
-//		{
-//			if (todelete->id == id)
-//			{
-//				found = true;
-//				break;
-//			}
-//			else
-//			{
-//				prev = todelete;
-//				todelete = todelete->next;
-//			}
-//		}
-//		if (found)
-//		{
-//			if (head->id == id) {
-//				todelete = head;
-//				head = head->next;
-//				delete todelete;
-//			}
-//			else {
-//				prev->next = todelete->next;
-//				delete todelete;
-//			}
-//			cout << "Song deleted" << endl;
-//		}
-//		else {
-//			cout << "Song not found" << endl;
-//		}
-//
-//	}
-//	main();
-//}
 
