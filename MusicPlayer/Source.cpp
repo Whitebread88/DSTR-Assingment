@@ -1,6 +1,7 @@
+//DSTR Assignment
+//Music Management Application using C++
+//By Group 11- Foong Kit Wah (TP049786) & Kong Xin Ying (TP055102)
 
-//commit first, then push all
-//remeber to pull also
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -44,7 +45,7 @@ void play_song_playlist(Song*);
 
 
 
-void main() {
+void main() {	//Main Menu
 	int option;
 	/*Song song;
 	song.artist = "jacob";
@@ -64,7 +65,7 @@ void main() {
 	cout << "8. Remove song from Playlist" << endl;
 	cout << "9. Delete Playlist" << endl;
 	cout << "10. Search for Playlists with specific songs" << endl;
-	cout << "11. Exit Application" << endl;
+	cout << "\n Press 0 to Exit Application" << endl;
 	cout << "\nChoose an option: ";
 	cin >> option;
 	switch (option)
@@ -111,7 +112,7 @@ void main() {
 void add_song_collection() {	//Add songs to the Collection vector
 	Song song;
 
-	cout << "\n========< ADD SONG INTO COLLECTION >======== " << endl;
+	cout << "\n========< ADD SONG INTO COLLECTION >======== \n" << endl;
 	cout << "Enter artist name: ";
 	cin >> song.artist;
 	cout << "Enter song title: ";
@@ -145,7 +146,7 @@ void display_song_collection() {		//Display all songs stored in the Collection
 
 	if (Collection.size() == 0)
 	{
-		cout << "\n------< No songs in collection. >------" << endl;
+		cout << "\n------< No songs in collection. >------\n" << endl;
 	}
 	else
 	{
@@ -178,13 +179,13 @@ void display_song_collection() {		//Display all songs stored in the Collection
 	}
 }
 
-int song_collection_check() {
+int song_collection_check() {		//Check if there are songs in the collection
 	int i = 1;
 
 	if (Collection.size() == 0)
 	{
-		cout << "\n------< No songs in collection. >------" << endl;
-		return 0;
+		cout << "\n------< No songs in collection. >------\n" << endl;
+		return main();
 	}
 	else
 	{
@@ -199,21 +200,27 @@ int song_collection_check() {
 	}
 }
 
-void delete_song_collection() {		//remove selected song from Collection and playlists
-	cout << "\n========< DELETE SONGS IN COLLECTION >======== " << endl;
+void delete_song_collection() {		//Remove selected song from Collection and Playlists
+	cout << "\n========< DELETE SONGS IN COLLECTION >======== \n" << endl;
 	string x;
 	int count = 0;
 	song_collection_check();
 	cout << "Enter song name to delete song: ";
 	cin >> x;
+	
 	for (const Song& e : Collection)
 	{
 		if (x == e.title)
 		{
 			Collection.erase(Collection.begin() + count);
-			cout << "------< Song: " << x << " deleted from collection. >------" << endl;
+			cout << "\n------< Song: " << x << " deleted from collection. >------" << endl;
+		}
+		else 
+		{
+			cout << "\n-----< Song does not exist >-----" << endl;
 		}
 		count += 1;
+		
 	}
 	if (PLHead != NULL) {
 		Playlist* playlist = PLHead;
@@ -270,14 +277,15 @@ void delete_song_collection() {		//remove selected song from Collection and play
 
 
 void playlist_search() {	//Search and display all playlists that contains a specific song
-	cout << "\n========< SEARCH SONG IN PLAYLIST >======== " << endl;
+	cout << "\n========< SEARCH SONG IN PLAYLIST >======== \n" << endl;
 	if (song_collection_check() != 0) {
 		bool exist = false;
 		string a;
+		Playlist* playlist = PLHead;
 		cout << "Enter song title to display all related playlists: ";
 		cin >> a;
 		if (PLHead->songinfo == NULL) {
-			cout << "There are no songs in any playlist. " << endl;
+			cout << " \n------< There are no songs in any playlist. >----- " << endl;
 		}
 		for (const Song& e : Collection)
 		{
@@ -289,14 +297,14 @@ void playlist_search() {	//Search and display all playlists that contains a spec
 		}
 		if (exist)
 		{
-			Playlist* playlist = PLHead;
+			
 			while (playlist != NULL)
 			{
 				Song* currentPL = playlist->songinfo;
 				while (currentPL != NULL)
 				{
 					if (a == currentPL->title) {
-						cout << "------< " << a << " found in playlist: " << playlist->name << " >------" << endl;
+						cout << "\n------< " << a << " found in playlist: " << playlist->name << " >------" << endl;
 					}
 					currentPL = currentPL->nextsong;
 				}
@@ -305,12 +313,12 @@ void playlist_search() {	//Search and display all playlists that contains a spec
 		}
 		else
 		{
-			cout << "------< Song does not exist in any playlist. >------ " << endl;
+			cout << "\n------< Song does not exist in any playlist. >------ " << endl;
 		}
 	}
 	else
 	{
-		cout << " ------< Add songs in Collection before searching. >------";
+		cout << "\n ------< Add songs in Collection before searching. >------";
 	}
 	int choice;
 	cout << "\n\n------Press 1 to return to main menu & 2 to exit------" << endl;
@@ -330,8 +338,8 @@ void playlist_search() {	//Search and display all playlists that contains a spec
 }
 
 
-void create_playlist() {	//create new playlist
-	cout << "\n========< CREATE PLAYLIST >======== " << endl;
+void create_playlist() {	//Create new playlist
+	cout << "\n========< CREATE PLAYLIST >========\n " << endl;
 	Playlist playlist;
 	string x;
 	cout << "Enter playlist name: ";
@@ -340,7 +348,7 @@ void create_playlist() {	//create new playlist
 	{
 		Playlist* newPL = new Playlist;
 		newPL->name = x;
-		cout << "------< Playlist " << newPL->name << " created. >------" << endl;;
+		cout << "\n------< Playlist " << newPL->name << " created. >------" << endl;;
 		newPL->nextplaylist = PLHead;
 		PLHead = newPL;
 		newPL->songinfo = NULL;
@@ -350,7 +358,7 @@ void create_playlist() {	//create new playlist
 		while (curPL != NULL)
 		{
 			if (curPL->name == x) {
-				cout << "------< Playlist " << curPL->name << " already exist. >------" << endl;;
+				cout << "\n------< Playlist " << curPL->name << " already exist. >------" << endl;;
 				break;
 			}
 			curPL = curPL->nextplaylist;
@@ -358,7 +366,7 @@ void create_playlist() {	//create new playlist
 		Playlist* newPL = new Playlist;
 		newPL->name = x;
 		newPL->nextplaylist = PLHead;
-		cout << "------< Playlist " << newPL->name << " created. >------" << endl;
+		cout << "\n------< Playlist " << newPL->name << " created. >------" << endl;
 		PLHead = newPL;
 		newPL->songinfo = NULL;
 	}
@@ -379,18 +387,19 @@ void create_playlist() {	//create new playlist
 	}
 }
 
-void view_playlist() {	//View all existing playlists
+void view_playlist() {		//View all existing playlists
 
 	if (PLHead == NULL) {
 		cout << "\n------< There are no existing playlist. >------\n";
+
 	}
 	else
 	{
-		cout << "\n < PLAYLISTS AVAILABLE > \n" << endl;
+		cout << "\n < PLAYLISTS AVAILABLE > " << endl;
 		Playlist* curPL = PLHead;
 		while (curPL != NULL)
 		{
-			cout << "Playlist: " << curPL->name << endl;
+			cout << "\n Playlist: " << curPL->name << endl;
 			curPL = curPL->nextplaylist;
 		}
 	}
@@ -411,36 +420,36 @@ void view_playlist() {	//View all existing playlists
 	}
 }
 
-int playlist_check() {	//Check if there are existing playlist
+int playlist_check() {		//Check if there are existing playlist
 	if (PLHead == NULL) {
 		cout << "\n------< There are no existing playlist. >------\n";
-		return 0;
+		return main();
 	}
 	else
 	{
-		cout << "\n < PLAYLISTS AVAILABLE > \n" << endl;
+		cout << "\n < PLAYLISTS AVAILABLE > " << endl;
 		Playlist* curPL = PLHead;
 		while (curPL != NULL)
 		{
-			cout << "Playlist: " << curPL->name << endl;
+			cout << "\nPlaylist: " << curPL->name << "\n";
 			curPL = curPL->nextplaylist;
 		}
 	}
 }
 
-void add_song() {	//Add songs into specific playlist
-	cout << "\n========< ADD SONGS INTO PLAYLIST >======== " << endl;
+void add_song() {		//Add songs from collection into specific playlist
+	cout << "\n========< ADD SONGS INTO PLAYLIST >======== \n" << endl;
 	bool exist = false;
 	if (playlist_check() != 0) {
 		Playlist* PL = PLHead;
 		string s;
-		cout << "Enter playlist name: ";
+		cout << "\nEnter playlist name: ";
 		cin >> s;
 		while (PL != NULL)
 		{
 			if (PL->name == s) {
 				exist = true;
-				cout << "Playlist " << PL->name << " found.";
+				cout << "\n-----< Playlist " << PL->name << " found. >-----";
 				break;
 			}
 			PL = PL->nextplaylist;
@@ -465,7 +474,7 @@ void add_song() {	//Add songs into specific playlist
 							newsong->duration = e.duration;
 							newsong->nextsong = PL->songinfo;
 							PL->songinfo = newsong;
-							cout << " ------< Song successfully added. >------";
+							cout << "\n------< Song successfully added. >------";
 							break;
 						}
 						else
@@ -476,31 +485,28 @@ void add_song() {	//Add songs into specific playlist
 							newsong->duration = e.duration;
 							newsong->nextsong = NULL;
 							PL->songinfo = newsong;
-							cout << "------< Song successfully added. >------";
+							cout << "\n------< Song successfully added. >------";
 							break;
 						}
 					}
-					else
-					{
-						cout << "------< Song does not exist. >------";
-					}
+					
 				}
 			}
 			else
 			{
-				cout << "------< Add songs in Collection before adding to playlist. >------";
+				cout << "\n------< Add songs in Collection before adding to playlist. >------";
 
 			}
 		}
 		else
 		{
-			cout << "------< Playlist not found. >------";
+			cout << "\n------< Playlist not found. >------";
 
 		}
 	}
 	else
 	{
-		cout << "------< Playlist not found. >------ ";
+		cout << "\n------< Playlist not found. >------ ";
 
 	}
 	int choice;
@@ -521,7 +527,7 @@ void add_song() {	//Add songs into specific playlist
 }
 
 void view_songs() {		//View all songs in specific playlist
-	cout << "\n========< VIEW SONGS IN PLAYLIST >======== " << endl;
+	cout << "\n========< VIEW SONGS IN PLAYLIST >========\n" << endl;
 	bool exist = false;
 	Song* SongPL=NULL;
 	if (playlist_check() != 0) {
@@ -534,7 +540,7 @@ void view_songs() {		//View all songs in specific playlist
 		{
 			if (playlist->name == x) {
 				exist = true;
-				cout << "Playlist: " << playlist->name;
+				cout << "\nPlaylist: " << playlist->name << "\n";
 				currentPL = playlist->songinfo;
 				SongPL = playlist->songinfo;
 				break;
@@ -546,11 +552,14 @@ void view_songs() {		//View all songs in specific playlist
 		{
 			if (currentPL != NULL)
 			{
+				int counter = 1;
 				while (currentPL != NULL)
 				{
-					cout << " || " << " Artist: " << currentPL->artist << " Title: " << currentPL->title << " Genre: " << currentPL->genre << " Duration: " << currentPL->duration;
+					cout << "Song " << counter << " || " << " Title: " << currentPL->title << " Artist: " << currentPL->artist << " Genre: " << currentPL->genre << " Duration: " << currentPL->duration << "\n";
 					currentPL = currentPL->nextsong;
+					counter++;
 				}
+				
 			}
 			else
 			{
@@ -564,7 +573,7 @@ void view_songs() {		//View all songs in specific playlist
 	}
 	else
 	{
-		cout << "------< There are no playlist. >------\n";
+		cout << "\n------< There are no playlist. >------\n";
 	}
 	int choice;
 	cout << "\n\n------Press 1 to play song, 2 to return to main menu & 3 to exit------" << endl;
@@ -587,19 +596,20 @@ void view_songs() {		//View all songs in specific playlist
 }
 
 void remove_song() {	//Remove specific song from specific playlist
-	cout << "\n========< REMOVE SONG IN PLAYLIST >======== " << endl;
+	cout << "\n========< REMOVE SONG IN PLAYLIST >========\n" << endl;
 	bool exist = false;
 	if (playlist_check() != 0) {
 		Song* currentPL = NULL;
 		Playlist* playlist = PLHead;
 		string x;
-		cout << "Enter playlist name: ";
+		cout << "\nEnter playlist name: ";
 		cin >> x;
 		while (playlist != NULL)
 		{
 			if (playlist->name == x) {
 				exist = true;
-				cout << "------< Playlist " << playlist->name << " found. >------";
+				cout << "\n< Playlist " << playlist->name << " found. >" ;
+				cout << "\nSongs in playlist:  \n";
 				currentPL = playlist->songinfo;
 				break;
 			}
@@ -610,11 +620,13 @@ void remove_song() {	//Remove specific song from specific playlist
 		{
 			if (currentPL != NULL)
 			{
+				int counter = 1;
 				Song* temp = currentPL;
 				while (currentPL != NULL)
 				{
-					cout << " || " << " Artist: " << currentPL->artist << " Title: " << currentPL->title << " Genre: " << currentPL->genre << " Duration: " << currentPL->duration;
+					cout << "Song " << counter << " || " << " Title: " << currentPL->title << " Artist: " << currentPL->artist << " Genre: " << currentPL->genre << " Duration: " << currentPL->duration << "\n";
 					currentPL = currentPL->nextsong;
+					counter++;
 				}
 				bool found = false;
 				string i;
@@ -664,7 +676,7 @@ void remove_song() {	//Remove specific song from specific playlist
 	}
 	else
 	{
-		cout << "------< There are no playlist. >------\n";
+		cout << "\n------< There are no playlist. >------\n";
 	}
 	int choice;
 	cout << "\n\n------Press 1 to return to main menu & 2 to exit------" << endl;
@@ -683,8 +695,8 @@ void remove_song() {	//Remove specific song from specific playlist
 	}
 }
 
-void delete_playlist() {	//delete selected playlist
-	cout << "\n========< DELETE PLAYLIST >======== " << endl;
+void delete_playlist() {		//Delete selected playlist
+	cout << "\n========< DELETE PLAYLIST >========\n " << endl;
 	bool exist = false;
 	if (playlist_check() != 0) {
 		Song* currentPL = NULL;
@@ -693,7 +705,7 @@ void delete_playlist() {	//delete selected playlist
 		Playlist* prev = NULL;
 		Playlist* playlist = PLHead;
 		string x;
-		cout << "Enter playlist name: ";
+		cout << "\nEnter playlist name: ";
 		cin >> x;
 		while (playlist != NULL)
 		{
@@ -754,7 +766,7 @@ void delete_playlist() {	//delete selected playlist
 	}
 }
 
-void play_song_collection() {
+void play_song_collection() {	//Choose songs from Collection to play
 	string x;
 	song_collection_check();
 	cout << "\nEnter song name to play song: ";
@@ -763,7 +775,7 @@ void play_song_collection() {
 	{
 		if (x == e.title)
 		{
-			cout << "------< Song: " << x << " is playing. >------" << endl;
+			cout << "\n------< Song: " << x << " is playing. >------" << endl;
 			break;
 		}
 	}
@@ -787,7 +799,7 @@ void play_song_collection() {
 	}
 }
 
-void play_song_playlist(Song *SongPL) {
+void play_song_playlist(Song *SongPL) {		//Choose songs from Playlist to play
 	string x;
 	Song* CurrentPL;
 	CurrentPL = SongPL;
@@ -799,11 +811,12 @@ void play_song_playlist(Song *SongPL) {
 		{
 			if (x == CurrentPL->title)
 			{
-				cout << "Song " << x << " is playing" << endl;
+				cout << "\n-----< Song " << x << " is playing >-----" << endl;
 				break;
 			}
 			CurrentPL = CurrentPL->nextsong;
 		}
+		
 	}
 	else
 	{
