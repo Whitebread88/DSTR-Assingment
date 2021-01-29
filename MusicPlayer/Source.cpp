@@ -433,7 +433,6 @@ void view_playlist() {		//View all existing playlists
 
 int playlist_check() {		//Check if there are existing playlist
 	if (PLHead == NULL) {
-		cout << "\n------< There are no existing playlist. >------\n";
 		return 0;
 	}
 	else
