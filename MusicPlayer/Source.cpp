@@ -204,59 +204,64 @@ void delete_song_collection() {		//Remove selected song from Collection and Play
 	cout << "\n========< DELETE SONGS IN COLLECTION >======== \n" << endl;
 	string x;
 	int count = 0;
-	song_collection_check();
-	cout << "Enter song name to delete song: ";
-	cin >> x;
-	
-	for (const Song& e : Collection)
-	{
-		if (x == e.title)
+	if (song_collection_check() != 0) {
+		cout << "Enter song name to delete song: ";
+		cin >> x;
+
+		for (const Song& e : Collection)
 		{
-			Collection.erase(Collection.begin() + count);
-			cout << "\n------< Song: " << x << " deleted from collection. >------" << endl;
+			if (x == e.title)
+			{
+				Collection.erase(Collection.begin() + count);
+				cout << "\n------< Song: " << x << " deleted from collection. >------" << endl;
+			}
+			else
+			{
+				cout << "\n-----< Song does not exist >-----" << endl;
+			}
+			count += 1;
+
 		}
-		else 
-		{
-			cout << "\n-----< Song does not exist >-----" << endl;
+		if (PLHead != NULL) {
+			Playlist* playlist = PLHead;
+			while (playlist != NULL)
+			{
+				Song* currentPL = playlist->songinfo;
+				Song* todelete = currentPL;
+				bool found = false;
+				Song* prev = NULL;
+				while (todelete != NULL)
+				{
+					if (x == todelete->title)
+					{
+						found = true;
+						break;
+					}
+					prev = todelete;
+					todelete = todelete->nextsong;
+				}
+				if (found)
+				{
+					if (prev != NULL)
+					{
+						prev->nextsong = todelete->nextsong;
+						delete todelete;
+					}
+					else
+					{
+						currentPL = currentPL->nextsong;
+						delete todelete;
+						playlist->songinfo = currentPL;
+					}
+					cout << "-----< Song: " << x << " deleted from playlist. >------" << endl;
+				}
+				playlist = playlist->nextplaylist;
+			}
 		}
-		count += 1;
-		
 	}
-	if (PLHead != NULL) {
-		Playlist* playlist = PLHead;
-		while (playlist != NULL)
-		{
-			Song* currentPL = playlist->songinfo;
-			Song* todelete = currentPL;
-			bool found = false;
-			Song* prev = NULL;
-			while (todelete != NULL)
-			{
-				if (x == todelete->title)
-				{
-					found = true;
-					break;
-				}
-				prev = todelete;
-				todelete = todelete->nextsong;
-			}
-			if (found)
-			{
-				if (prev != NULL)
-				{
-					prev->nextsong = todelete->nextsong;
-					delete todelete;
-				}
-				else
-				{
-					currentPL = currentPL->nextsong;
-					delete todelete;
-					playlist->songinfo = currentPL;
-				}
-				cout << "-----< Song: " << x << " deleted from playlist. >------" << endl;
-			}
-			playlist = playlist->nextplaylist;
-		}
+	else
+	{
+		cout << "\n-----< Add songs before deleting songs. >-----" << endl;
 	}
 	int choice;
 	cout << "\n\n------Press 1 to return to main menu & 2 to exit------" << endl;
@@ -495,7 +500,7 @@ void add_song() {		//Add songs from collection into specific playlist
 							break;
 						}
 					}
-					
+
 				}
 			}
 			else
@@ -535,7 +540,7 @@ void add_song() {		//Add songs from collection into specific playlist
 void view_songs() {		//View all songs in specific playlist
 	cout << "\n========< VIEW SONGS IN PLAYLIST >========\n" << endl;
 	bool exist = false;
-	Song* SongPL=NULL;
+	Song* SongPL = NULL;
 	if (playlist_check() != 0) {
 		Song* currentPL = NULL;
 		Playlist* playlist = PLHead;
@@ -565,7 +570,7 @@ void view_songs() {		//View all songs in specific playlist
 					currentPL = currentPL->nextsong;
 					counter++;
 				}
-				
+
 			}
 			else
 			{
@@ -614,7 +619,7 @@ void remove_song() {	//Remove specific song from specific playlist
 		{
 			if (playlist->name == x) {
 				exist = true;
-				cout << "\n< Playlist " << playlist->name << " found. >" ;
+				cout << "\n< Playlist " << playlist->name << " found. >";
 				cout << "\nSongs in playlist:  \n";
 				currentPL = playlist->songinfo;
 				break;
@@ -774,17 +779,23 @@ void delete_playlist() {		//Delete selected playlist
 
 void play_song_collection() {	//Choose songs from Collection to play
 	string x;
-	song_collection_check();
-	cout << "\nEnter song name to play song: ";
-	cin >> x;
-	for (const Song& e : Collection)
-	{
-		if (x == e.title)
+	if (song_collection_check() != 0) {
+		cout << "\nEnter song name to play song: ";
+		cin >> x;
+		for (const Song& e : Collection)
 		{
-			cout << "\n------< Song: " << x << " is playing. >------" << endl;
-			break;
+			if (x == e.title)
+			{
+				cout << "\n------< Song: " << x << " is playing. >------" << endl;
+				break;
+			}
 		}
 	}
+	else
+	{
+		cout << "------< Add songs before playing songs.>------" << endl;
+	}
+
 	int choice;
 	cout << "\n\n------Press 1 to play another song, 2 to return to main menu & 3 to exit------" << endl;
 	cout << "Enter an option: ";
@@ -805,7 +816,7 @@ void play_song_collection() {	//Choose songs from Collection to play
 	}
 }
 
-void play_song_playlist(Song *SongPL) {		//Choose songs from Playlist to play
+void play_song_playlist(Song* SongPL) {		//Choose songs from Playlist to play
 	string x;
 	Song* CurrentPL;
 	CurrentPL = SongPL;
@@ -813,7 +824,7 @@ void play_song_playlist(Song *SongPL) {		//Choose songs from Playlist to play
 	cin >> x;
 	if (CurrentPL != NULL)
 	{
-		while (CurrentPL!= NULL)
+		while (CurrentPL != NULL)
 		{
 			if (x == CurrentPL->title)
 			{
@@ -822,7 +833,7 @@ void play_song_playlist(Song *SongPL) {		//Choose songs from Playlist to play
 			}
 			CurrentPL = CurrentPL->nextsong;
 		}
-		
+
 	}
 	else
 	{
