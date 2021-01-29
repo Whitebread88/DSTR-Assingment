@@ -185,7 +185,7 @@ int song_collection_check() {		//Check if there are songs in the collection
 	if (Collection.size() == 0)
 	{
 		cout << "\n------< No songs in collection. >------\n" << endl;
-		return main();
+		return 0;
 	}
 	else
 	{
@@ -281,39 +281,45 @@ void playlist_search() {	//Search and display all playlists that contains a spec
 	if (song_collection_check() != 0) {
 		bool exist = false;
 		string a;
-		Playlist* playlist = PLHead;
 		cout << "Enter song title to display all related playlists: ";
 		cin >> a;
-		if (PLHead->songinfo == NULL) {
-			cout << " \n------< There are no songs in any playlist. >----- " << endl;
-		}
-		for (const Song& e : Collection)
+		if (PLHead != NULL)
 		{
-			if (a == e.title)
-			{
-				exist = true;
-				break;
+			if (PLHead->songinfo == NULL) {
+				cout << " \n------< There are no songs in any playlist. >----- " << endl;
 			}
-		}
-		if (exist)
-		{
-			
-			while (playlist != NULL)
+			for (const Song& e : Collection)
 			{
-				Song* currentPL = playlist->songinfo;
-				while (currentPL != NULL)
+				if (a == e.title)
 				{
-					if (a == currentPL->title) {
-						cout << "\n------< " << a << " found in playlist: " << playlist->name << " >------" << endl;
-					}
-					currentPL = currentPL->nextsong;
+					exist = true;
+					break;
 				}
-				playlist = playlist->nextplaylist;
+			}
+			if (exist)
+			{
+				Playlist* playlist = PLHead;
+				while (playlist != NULL)
+				{
+					Song* currentPL = playlist->songinfo;
+					while (currentPL != NULL)
+					{
+						if (a == currentPL->title) {
+							cout << "\n------< " << a << " found in playlist: " << playlist->name << " >------" << endl;
+						}
+						currentPL = currentPL->nextsong;
+					}
+					playlist = playlist->nextplaylist;
+				}
+			}
+			else
+			{
+				cout << "\n------< Song does not exist in any playlist. >------ " << endl;
 			}
 		}
 		else
 		{
-			cout << "\n------< Song does not exist in any playlist. >------ " << endl;
+			cout << "\n------< There are no existing playlist. >------ " << endl;
 		}
 	}
 	else
@@ -423,7 +429,7 @@ void view_playlist() {		//View all existing playlists
 int playlist_check() {		//Check if there are existing playlist
 	if (PLHead == NULL) {
 		cout << "\n------< There are no existing playlist. >------\n";
-		return main();
+		return 0;
 	}
 	else
 	{
