@@ -208,7 +208,6 @@ void delete_song_collection() {		//Remove selected song from Collection and Play
 	if (song_collection_check() != 0) {
 		cout << "Enter song name to delete song: ";
 		cin >> x;
-
 		for (const Song& e : Collection)
 		{
 			if (x == e.title)
