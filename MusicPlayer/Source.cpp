@@ -202,6 +202,7 @@ int song_collection_check() {		//Check if there are songs in the collection
 
 void delete_song_collection() {		//Remove selected song from Collection and Playlists
 	cout << "\n========< DELETE SONGS IN COLLECTION >======== \n" << endl;
+	bool exist = false;
 	string x;
 	int count = 0;
 	if (song_collection_check() != 0) {
@@ -213,14 +214,18 @@ void delete_song_collection() {		//Remove selected song from Collection and Play
 			if (x == e.title)
 			{
 				Collection.erase(Collection.begin() + count);
-				cout << "\n------< Song: " << x << " deleted from collection. >------" << endl;
-			}
-			else
-			{
-				cout << "\n-----< Song does not exist >-----" << endl;
+				exist = true;
+				break;
 			}
 			count += 1;
-
+		}
+		if (exist)
+		{
+			cout << "\n------< Song: " << x << " deleted from collection. >------" << endl;
+		}
+		else
+		{
+			cout << "\n-----< Song does not exist >-----" << endl;
 		}
 		if (PLHead != NULL) {
 			Playlist* playlist = PLHead;
@@ -290,9 +295,6 @@ void playlist_search() {	//Search and display all playlists that contains a spec
 		cin >> a;
 		if (PLHead != NULL)
 		{
-			if (PLHead->songinfo == NULL) {
-				cout << " \n------< There are no songs in any playlist. >----- " << endl;
-			}
 			for (const Song& e : Collection)
 			{
 				if (a == e.title)
@@ -353,6 +355,7 @@ void create_playlist() {	//Create new playlist
 	cout << "\n========< CREATE PLAYLIST >========\n " << endl;
 	Playlist playlist;
 	string x;
+	bool found = false;
 	cout << "Enter playlist name: ";
 	cin >> x;
 	if (PLHead == NULL)
@@ -370,16 +373,20 @@ void create_playlist() {	//Create new playlist
 		{
 			if (curPL->name == x) {
 				cout << "\n------< Playlist " << curPL->name << " already exist. >------" << endl;;
+				found = true;
 				break;
 			}
 			curPL = curPL->nextplaylist;
 		}
-		Playlist* newPL = new Playlist;
-		newPL->name = x;
-		newPL->nextplaylist = PLHead;
-		cout << "\n------< Playlist " << newPL->name << " created. >------" << endl;
-		PLHead = newPL;
-		newPL->songinfo = NULL;
+		if (!found)
+		{
+			Playlist* newPL = new Playlist;
+			newPL->name = x;
+			newPL->nextplaylist = PLHead;
+			cout << "\n------< Playlist " << newPL->name << " created. >------" << endl;
+			PLHead = newPL;
+			newPL->songinfo = NULL;
+		}
 	}
 	int choice;
 	cout << "\n\n------Press 1 to return to main menu & 2 to exit------" << endl;
